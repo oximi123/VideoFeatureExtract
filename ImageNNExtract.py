@@ -160,6 +160,17 @@ class Img2Vec():
         else:
             raise KeyError('Model %s was not found' % model_name)
 
+def normalize(x, copy=False):
+    """
+    A helper function that wraps the function of the same name in sklearn.
+    This helper handles the case of a single column vector.
+    """
+    if type(x) == np.ndarray and len(x.shape) == 1:
+        return np.squeeze(sknormalize(x.reshape(1, -1), copy=copy))
+        # return np.squeeze(x / np.sqrt((x ** 2).sum(-1))[..., np.newaxis])
+    else:
+        return sknormalize(x, copy=copy)
+        # return x / np.sqrt((x ** 2).sum(-1))[..., np.newaxis]
 
 if __name__ == '__main__':
     net = Img2Vec()  # Img2Vec 是封装好网络的类
